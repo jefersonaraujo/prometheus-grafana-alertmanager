@@ -71,11 +71,3 @@ services:
      - 3000:3000
    networks:
      - monitor-net     
-  web:
-   build: .
-   expose:
-     - 3000    
-   ports:
-     - "5000:5000"
-   networks:
-     - monitor-net    
