@@ -28,6 +28,11 @@ scrape_configs:
     static_configs:
       - targets: ['nodeexporter:9100']
 
+  - job_name: 'node-vm-aws'
+    metrics_path: /metrics  
+    scrape_interval: 10s
+    static_configs:
+      - targets: ['54.211.34.205:9100']
 
   - job_name: 'app'
     metrics_path: /
