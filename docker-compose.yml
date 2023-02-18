@@ -15,7 +15,7 @@ services:
     container_name: prometheus
     volumes:
       - ./prometheus/:/etc/prometheus/
-      - prometheus_data:/prometheus
+      - ./prometheus_data:/prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
@@ -30,7 +30,19 @@ services:
       - "9090:9090"
     networks:
       - monitor-net
-
+  alertmanager-forum-api: 
+    image: prom/alertmanager
+    container_name: alertmanager-forum-api
+    volumes: 
+      - ./alertmanager:/etc/alertmanager/:ro
+    ports: 
+      - 9093:9093
+    command: 
+      - --config.file=/etc/alertmanager/alertmanager.yml
+    networks:
+      - monitor-net
+    depends_on:
+      - prometheus      
   nodeexporter:
     image: prom/node-exporter:latest
     container_name: nodeexporter
@@ -55,11 +67,11 @@ services:
    image: grafana/grafana:latest
    container_name: grafana
    volumes:
-     - grafana_data:/var/lib/grafana
+     - ./grafana_data:/var/lib/grafana
      - ./grafana/datasources:/etc/grafana/datasources
      - ./grafana/dashboards:/etc/grafana/dashboards
      - ./grafana/setup.sh:/setup.sh
-   entrypoint: /setup.sh
+  #  entrypoint: /setup.sh
    environment:
      - GF_SECURITY_ADMIN_USER=${ADMIN_USER:-admin}
      - GF_SECURITY_ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin}
